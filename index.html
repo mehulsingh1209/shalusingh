@@ -104,6 +104,7 @@
             color: var(--charcoal);
             font-size: 1.5rem;
             cursor: pointer;
+            z-index: 1000;
         }
         
         #menu {
@@ -127,6 +128,7 @@
             font-size: 0.9rem;
             letter-spacing: 1px;
             position: relative;
+            padding: 0.5rem 0;
         }
         
         nav a::after {
@@ -421,10 +423,14 @@
                 display: flex;
                 justify-content: flex-end;
                 padding: 0 5%;
+                width: 100%;
             }
             
             #menu-toggle {
                 display: block;
+                position: absolute;
+                top: 20px;
+                right: 5%;
             }
             
             #menu {
@@ -433,15 +439,28 @@
                 position: absolute;
                 top: 70px;
                 right: 5%;
+                left: 5%;
                 background-color: var(--blush);
                 padding: 1rem;
                 border-radius: 5px;
                 box-shadow: 0 5px 15px rgba(0,0,0,0.1);
                 z-index: 100;
+                width: 90%;
+                text-align: center;
+            }
+            
+            #menu.active {
+                display: flex;
             }
             
             #menu li {
                 margin: 0.5rem 0;
+                padding: 0.5rem 0;
+            }
+            
+            nav a {
+                display: block;
+                padding: 0.5rem 0;
             }
             
             section {
@@ -678,7 +697,7 @@
 
                 // Close mobile menu if open
                 if (window.innerWidth <= 768) {
-                    document.getElementById('menu').classList.add('hidden');
+                    document.getElementById('menu').classList.remove('active');
                 }
             });
         });
@@ -732,9 +751,40 @@
         window.addEventListener('scroll', animateOnScroll);
 
         // Mobile menu toggle
-        document.getElementById('menu-toggle').addEventListener('click', function() {
-            const menu = document.getElementById('menu');
-            menu.classList.toggle('hidden');
+        const menuToggle = document.getElementById('menu-toggle');
+        const menu = document.getElementById('menu');
+        
+        menuToggle.addEventListener('click', function() {
+            menu.classList.toggle('active');
+            
+            // Change icon based on menu state
+            if (menu.classList.contains('active')) {
+                menuToggle.innerHTML = '<i class="fas fa-times"></i>';
+            } else {
+                menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+        
+        // Close menu when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768) {
+                const isClickInsideMenu = menu.contains(event.target);
+                const isClickOnToggle = menuToggle.contains(event.target);
+                
+                if (!isClickInsideMenu && !isClickOnToggle && menu.classList.contains('active')) {
+                    menu.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            }
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                // Ensure menu is visible on desktop
+                menu.classList.remove('active');
+                menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            }
         });
     </script>
 </body>
