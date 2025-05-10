@@ -6,7 +6,7 @@
     <title>Shalu Singh | Business Administration Professional</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Lora:wght@400;500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;500;700&family=Lora:wght@400;500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -25,14 +25,14 @@
         }
         
         body {
-            font-family: 'Lora', serif;
+            font-family: 'Roboto', sans-serif;
             color: var(--charcoal);
             background-color: var(--offwhite);
             line-height: 1.6;
         }
         
         h1, h2, h3, h4 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Open Sans', sans-serif;
             font-weight: 500;
             color: var(--charcoal);
         }
@@ -97,9 +97,22 @@
             right: 5%;
         }
         
-        nav ul {
+        #menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--charcoal);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        #menu {
             display: flex;
             list-style: none;
+        }
+        
+        #menu.hidden {
+            display: none;
         }
         
         nav li {
@@ -152,11 +165,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 3rem;
             overflow: hidden;
             border: 5px solid white;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         /* Section Styles */
@@ -330,7 +347,7 @@
             margin-bottom: 1rem;
             border: 1px solid var(--softgray);
             border-radius: 5px;
-            font-family: 'Lora', serif;
+            font-family: 'Roboto', sans-serif;
             transition: border-color 0.3s ease;
         }
         
@@ -401,14 +418,30 @@
             nav {
                 position: static;
                 margin-bottom: 1rem;
+                display: flex;
+                justify-content: flex-end;
+                padding: 0 5%;
             }
             
-            nav ul {
-                justify-content: center;
+            #menu-toggle {
+                display: block;
             }
             
-            nav li {
-                margin: 0 0.5rem;
+            #menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                right: 5%;
+                background-color: var(--blush);
+                padding: 1rem;
+                border-radius: 5px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                z-index: 100;
+            }
+            
+            #menu li {
+                margin: 0.5rem 0;
             }
             
             section {
@@ -428,13 +461,36 @@
             .blog-preview {
                 grid-template-columns: 1fr;
             }
+            
+            .profile-image {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            h1 {
+                font-size: 3rem;
+            }
+            
+            h2 {
+                font-size: 2.5rem;
+            }
+            
+            .profile-image {
+                width: 200px;
+                height: 200px;
+            }
         }
     </style>
 </head>
 <body>
     <header class="blush-header">
         <nav>
-            <ul>
+            <button id="menu-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul id="menu">
                 <li><a href="#about">About</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#education">Education</a></li>
@@ -446,7 +502,7 @@
             <h1>Shalu Singh</h1>
             <p class="tagline">Lead Quality Analyst at Concentrix | Gurugram, Haryana, India</p>
             <div class="profile-image">
-                <i class="fas fa-user"></i>
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80" alt="Profile Image" class="profile-photo">
             </div>
         </div>
     </header>
@@ -619,6 +675,11 @@
                     top: targetElement.offsetTop - 80,
                     behavior: 'smooth'
                 });
+
+                // Close mobile menu if open
+                if (window.innerWidth <= 768) {
+                    document.getElementById('menu').classList.add('hidden');
+                }
             });
         });
         
@@ -669,6 +730,12 @@
         
         // Run on scroll
         window.addEventListener('scroll', animateOnScroll);
+
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('hidden');
+        });
     </script>
 </body>
 </html>
